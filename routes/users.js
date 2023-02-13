@@ -1,22 +1,16 @@
 import express from 'express';
-import { v4 as uuidv4 } from 'uuid';
+import { createUser, getUser, getUsers, deleteUser, updateUser } from '../controllers/users.js';
 
 const router = express.Router();
 
-const users = []
+router.get('/', getUsers); 
 
-// * Todas as rotas aqui estão começando com /users
-router.get('/', (req, res) => {
+router.post('/', createUser);
 
-    res.send(users);
-}); 
+router.get('/:id', getUser);
 
-router.post('/', (req, res) => {
-    const user = req.body;
-    // * Criando um ID para o usuário chamado, com a extensão/lib uuid
-    users.push({ ...user, id:  uuidv4() });
+router.delete('/:id', deleteUser);
 
-    res.send(`Usuário com o nome de ${user.firstName} adicionado ao banco de dados`);
-});
+router.patch('/:id', updateUser);
 
-export default router;
+export default router; 
