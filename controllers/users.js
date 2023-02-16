@@ -1,5 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
 
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'nps2'
+});
+
+connection.connect();
+
 let users = [];
 
 // * Rota para criar um usuário (Usando Postman)
