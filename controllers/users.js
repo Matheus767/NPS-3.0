@@ -17,6 +17,7 @@ export const createUser = (req, res) => {
     const user = req.body;
     // * Criando um ID para o usuário chamado, com a extensão/lib uuid
     users.push({ ...user, id:  uuidv4() });
+    const query = 'INSERT INTO funcionario (nome, idade, id) VALUES (?, ?, ?)';
 
     res.send(`Usuário com o nome de ${user.firstName} adicionado ao banco de dados`);
 }
