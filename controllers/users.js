@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 
-const mysql = require('mysql');
+import mysql from 'mysql';
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'nps2'
+    database: 'nps3'
 });
 
-connection.connect();
+connection.connect(console.log("Connected!"));
 
 let users = [];
 
@@ -17,10 +17,11 @@ export const createUser = (req, res) => {
     const user = req.body;
     // * Criando um ID para o usuário chamado, com a extensão/lib uuid
     users.push({ ...user, id:  uuidv4() });
-    const query = 'INSERT INTO funcionario (nome, idade, id) VALUES (?, ?, ?)';
+    const query = `INSERT INTO funcionario (nome, lastname, idade, id) VALUES (${user.nome}, ${user.lastname}, ${user.age},${user.id})`;
+    connection.query(query);
 
-    res.send(`Usuário com o nome de ${user.firstName} adicionado ao banco de dados`);
-}
+    res.send(`Usuário com o nome de ${user.nome} adicionado ao banco de dados`);
+}   
 
 // * Rota para achar um usuário com um ID específico
 // * req.params está requerindo um certo parâmetro, no caso O id
@@ -63,3 +64,5 @@ export const updateUser = (req, res) => {
 
     res.send(`User with the id ${id} has been updated.`);
 }
+
+connection.end();
