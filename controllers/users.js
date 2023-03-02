@@ -8,8 +8,6 @@ const connection = mysql.createConnection({
     database: 'nps3'
 });
 
-connection.connect(console.log("Connected!"));
-
 let users = [];
 
 // * Rota para criar um usuário (Usando Postman)
@@ -17,9 +15,17 @@ export const createUser = (req, res) => {
     const user = req.body;
     // * Criando um ID para o usuário chamado, com a extensão/lib uuid
     users.push({ ...user, id:  uuidv4() });
-    const query = `INSERT INTO funcionario (nome, lastname, idade, id) VALUES (${user.nome}, ${user.lastname}, ${user.age},${user.id})`;
-    connection.query(query);
+    console.log(users);
 
+    connection.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        let sql = `INSERT INTO funcionario (nome, lastname, idade, id) VALUES ('${user.nome}', '${user.lastname}', '${user.age}','${user.id}')`;
+        connection.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("Usuário Gravado no Banco de Dados!");
+        });
+    });
     res.send(`Usuário com o nome de ${user.nome} adicionado ao banco de dados`);
 }   
 
@@ -58,11 +64,9 @@ export const updateUser = (req, res) => {
 
     const user = users.find((user) => user.id == id);
 
-    if(firstName) user.firstName = firstName; 
-    if(lastName) user.lastName = lastName;
+    if(firstName) user.nome = nome; 
+    if(lastName) user.lastname = lastname;
     if(age) user.age = age;
 
     res.send(`User with the id ${id} has been updated.`);
 }
-
-connection.end();
